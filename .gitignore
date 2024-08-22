@@ -1,1 +1,5 @@
 /target
+/Release
+/ReleaseMetaData/Mac/AppIcon.icns
+/ReleaseMetaData/Mac/AppIcon.iconset
+*.dmg
