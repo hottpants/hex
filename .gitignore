@@ -3,3 +3,4 @@
 /ReleaseMetaData/Mac/AppIcon.icns
 /ReleaseMetaData/Mac/AppIcon.iconset
 *.dmg
+.DS_Store
