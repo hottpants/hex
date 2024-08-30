@@ -11,7 +11,7 @@
 	<key>CFBundleIconFile</key>
 	<string>AppIcon.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.AVStudios.Hex</string>
+	<string>com.ABStudios.Hex</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
