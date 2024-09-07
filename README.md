@@ -1,1 +1,2 @@
-# Shitty Game ADAM BALLS
+# HEX
+*we have techX, join us*

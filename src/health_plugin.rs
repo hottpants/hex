@@ -9,7 +9,7 @@ impl Plugin for HealthDamagePlugin {
             .add_event::<DamageInstance>()
             .add_systems(Update,
                          (
-                             damage,
+                             damage_player_tester,
                              take_damage
                          ),
             )
@@ -29,12 +29,16 @@ impl Default for HP {
 #[derive(Event)]
 pub struct DamageInstance(Entity, i32);
 
+
+// TODO: Delete/move both player component and damage_player_tester, they don't belong here
+// This plugin should be as agnostic as possible: it should not care if the damaged or damager is 
+// the player
 #[derive(Component)]
 pub struct Player;
 
 
 // When E is pressed, damage the player by 3
-pub fn damage(input: Res<ButtonInput<KeyCode>>, mut damage_ev: EventWriter<DamageInstance>, query: Query<Entity, With<Player>>) {
+pub fn damage_player_tester(input: Res<ButtonInput<KeyCode>>, mut damage_ev: EventWriter<DamageInstance>, query: Query<Entity, With<Player>>) {
     if input.pressed(KeyCode::KeyE) {
         let player_id = query.get_single().expect("There was an error assuming only one entity had the player component");
         damage_ev.send(DamageInstance(player_id, 3));
@@ -54,58 +58,3 @@ pub fn take_damage(mut damage_ev: EventReader<DamageInstance>, mut query: Query<
         }
     });
 }
-
-// What we did together
-
-// use bevy::prelude::*;
-//
-// pub struct HealthPlugin;
-//
-// impl Plugin for HealthPlugin {
-//     fn build(&self, app: &mut App) {
-//         app.add_systems(Update, (print_hp, take_dmg, kill_player));
-//     }
-// }
-//
-// #[derive(Component)]
-// pub struct Health {
-//     health: i32
-// }
-//
-// impl Default for Health {
-//     fn default() -> Self {
-//         Health
-//         {
-//             health: 100,
-//         }
-//     }
-// }
-//
-//
-// fn take_dmg(mut query: Query<(&mut Health, &Player)>) {
-//
-//     for (mut health, _ ) in &mut query {
-//         health.health -= 1;
-//     }
-// }
-//
-// fn kill_player(mut commands: Commands, mut query: Query<(Entity, &Health, &Player)>) {
-//
-//     for (balls, health, _ ) in &mut query {
-//         if health.health <= 0 {
-//             commands.entity(balls).despawn();
-//         }
-//
-//     }
-// }
-// fn print_hp(mut query: Query<(&Health, &Player)>) {
-//
-//     for (health, _ ) in &mut query {
-//         eprintln!("Adamballs has {} HP.", health.health);
-//     }
-// }
-//
-// #[derive(Component)]
-// pub struct Player;
-//
-//
