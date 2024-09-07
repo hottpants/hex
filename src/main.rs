@@ -12,6 +12,7 @@ use bevy_egui::{egui, EguiContexts, EguiPlugin};
 use bevy_egui::egui::Color32;
 
 use character_plugin::*;
+use health_plugin::{HealthDamagePlugin, HP, Player};
 
 fn main() {
     App::new()
@@ -26,7 +27,8 @@ fn main() {
             (
                 EguiPlugin,
                 PhysicsPlugins::default().with_length_unit(10.0),
-                CharacterControllerPlugin
+                CharacterControllerPlugin,
+                HealthDamagePlugin
             )
         )
         .insert_resource(Gravity(Vector::new(0.0,-1000.0)))
@@ -54,7 +56,12 @@ fn setup(
         },
         CharacterControllerBundle::new(Collider::capsule(12.5, 20.0), Vector::NEG_Y * 1500.0)
             .with_movement(1250.0, 0.92, 400.0, (30.0 as Scalar).to_radians()),
-    ));
+        Player,
+        HP::default()
+    )
+    
+    
+    );
 
     // Default Blender Cube
     commands.spawn((
