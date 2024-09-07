@@ -1,5 +1,6 @@
 #![windows_subsystem = "windows"]
 mod character_plugin;
+mod health_plugin;
 
 use bevy::{
     prelude::*,
