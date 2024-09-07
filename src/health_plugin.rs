@@ -1,6 +1,28 @@
 use bevy::prelude::*;
 use std::collections::{HashMap};
 
+/**
+# TLDR of how this shit works:
+
+Just send a [`DamageInstance`] and if the thing has a [`HP`] component it'll take damage
+
+# Slightly longer TLDR
+there is a damage instance event setup by the plugin, which works as a queue for all instances of damage to be carried out that update tick
+
+Player A damages thing B || Projectile Z realizes it collided with entity U || Death box intersects with Player L? 
+
+"Send" a damage instance event.
+
+```Rust
+fn ouch (mut damage_ev: EventWriter<DamageInstance>) {
+    damage_ev.send(DamageInstance(player_id, 3));
+}
+```
+
+A billion events occur, they stack up, and next update tick this plugin takes care of reading/deleting all events sent and reducing the hp component's value
+
+ **/
+
 pub struct HealthDamagePlugin;
 
 impl Plugin for HealthDamagePlugin {
