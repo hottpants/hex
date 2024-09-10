@@ -32,15 +32,18 @@ impl Plugin for HealthDamagePlugin {
             .add_systems(Update,
                          (
                              damage_player_tester,
-                             take_damage
+                             take_damage,
+                             kill
                          ),
             )
         ;
     }
 }
 
-#[derive(Component)]
-pub struct HP(i32);
+struct things(bool);
+
+#[derive(Component, PartialOrd, PartialEq)]
+pub struct HP(pub i32);
 
 impl Default for HP {
     fn default() -> Self {
@@ -48,8 +51,14 @@ impl Default for HP {
     }
 }
 
+impl From<i32> for HP {
+    fn from(value: i32) -> Self {
+        HP(value)
+    }
+}
+
 #[derive(Event)]
-pub struct DamageInstance(Entity, i32);
+pub struct DamageInstance(pub Entity, pub i32);
 
 
 // TODO: Delete/move both player component and damage_player_tester, they don't belong here
@@ -79,4 +88,14 @@ pub fn take_damage(mut damage_ev: EventReader<DamageInstance>, mut query: Query<
             println!("{entity} took {damage} damage. HP {} -> {}", hp.0 + damage, hp.0);
         }
     });
+}
+
+fn kill(mut commands: Commands, mut query: Query<(Entity, &HP, &Player)>) {
+
+    for (balls, health, _ ) in &mut query {
+        if health.0 <= 0 {
+            commands.entity(balls).despawn();
+        }
+
+    }
 }
